@@ -1,40 +1,145 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>LAC_NOT | ال ای سـی نات</title>
-  <style>
-    :root {
-      --red: #ff0033;
-      --dark: #0b0b0b;
-      --light: #f5f5f5;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAC VOID | ال ای سـی خلأ</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
 
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, var(--dark) 10%, #1a0000 50%, var(--red) 120%);
-      color: var(--light);
-      font-family: "Tahoma", "Helvetica", "Arial", sans-serif;
-      overflow: hidden;
-    }
+body, html {
+  margin: 0; padding: 0; overflow: hidden;
+  font-family: 'Orbitron', monospace;
+  background: radial-gradient(ellipse at center, #0a0a0a 0%, #020202 100%);
+  height: 100%; width: 100%;
+  display: flex; justify-content: center; align-items: center;
+}
 
-    .wrap {
-      min-height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      box-sizing: border-box;
-    }
+.card {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(30,30,30,0.85);
+  padding: 30px 25px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 0 50px rgba(120,120,150,0.4), 0 0 60px rgba(120,120,150,0.2) inset;
+  backdrop-filter: blur(5px);
+  z-index: 2;
+  width: 320px;
+}
 
-    .card {
-      max-width: 720px;
-      width: 100%;
-      text-align: center;
-      border-radius: 16px;
+.card:hover {
+  transform: translate(-50%, -50%) scale(1.03);
+  box-shadow: 0 0 70px rgba(150,150,200,0.5), 0 0 80px rgba(150,150,200,0.3) inset;
+}
+
+.logo {
+  width: 140px; height: 140px; border-radius: 50%;
+  object-fit: cover; margin-bottom: 20px;
+  border: 2px solid rgba(150,150,200,0.4);
+  box-shadow: 0 0 25px rgba(150,150,200,0.4);
+}
+
+h1 {
+  font-size: 26px; color: #ccc;
+  text-shadow: 0 0 15px rgba(180,180,220,0.8);
+  margin-bottom: 25px;
+}
+
+.btn {
+  padding: 12px 28px; border-radius: 50px;
+  background: linear-gradient(145deg,#222,#666);
+  color: #fff; font-weight: 700; text-decoration: none;
+  box-shadow: 0 0 25px rgba(180,180,220,0.4), 0 0 40px rgba(180,180,220,0.2) inset;
+  transition: all 0.3s ease; font-size:16px; letter-spacing:1px;
+  display: inline-block;
+}
+
+.btn:hover {
+  background: linear-gradient(145deg,#666,#222);
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 0 50px rgba(180,180,220,0.5), 0 0 50px rgba(180,180,220,0.3) inset;
+}
+
+canvas { display:block; position:absolute; top:0; left:0; z-index:1; }
+
+@media(max-width:480px){
+  .card{width:90%; padding:20px;}
+  .logo{width:120px;height:120px;}
+  h1{font-size:20px;}
+  .btn{padding:10px 20px;font-size:14px;}
+}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div class="card">
+  <img class="logo" src="https://uploadkon.ir/uploads/6d7307_26Screenshot-20260104-200519-Gallery.png" alt="LAC VOID">
+  <h1>LAC VOID | ال ای سـی خلأ</h1>
+  <a class="btn" href="https://rubika.ir/LAC_VOID" target="_blank">ورود به کانال روبیکا</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"></script>
+<script>
+// صحنه و دوربین
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({canvas: document.getElementById('bg'), antialias:true});
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x000000,1);
+
+// ذرات کهکشانی
+const particleCount = 800;
+const particles = new THREE.BufferGeometry();
+const positions = [];
+const colors = [];
+
+for(let i=0;i<particleCount;i++){
+  positions.push((Math.random()-0.5)*300);
+  positions.push((Math.random()-0.5)*300);
+  positions.push((Math.random()-0.5)*300);
+
+  const color = new THREE.Color();
+  color.setHSL(Math.random()*0.1+0.55,0.7,Math.random()*0.5+0.5);
+  colors.push(color.r,color.g,color.b);
+}
+
+particles.setAttribute('position', new THREE.Float32BufferAttribute(positions,3));
+particles.setAttribute('color', new THREE.Float32BufferAttribute(colors,3));
+
+const particleMaterial = new THREE.PointsMaterial({
+  vertexColors:true,
+  size:1.8,
+  transparent:true,
+  opacity:0.8
+});
+const particleSystem = new THREE.Points(particles, particleMaterial);
+scene.add(particleSystem);
+
+camera.position.z = 120;
+
+// نور ملایم کارت (شبیه هاله)
+const light = new THREE.PointLight(0x9999ff, 0.5);
+light.position.set(0,0,100);
+scene.add(light);
+
+// انیمیشن
+function animate(){
+  requestAnimationFrame(animate);
+  particleSystem.rotation.y += 0.002;
+  particleSystem.rotation.x += 0.001;
+  renderer.render(scene,camera);
+}
+animate();
+
+window.addEventListener('resize', ()=>{
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+</html>      border-radius: 16px;
       padding: 40px 28px;
       background: rgba(255, 255, 255, 0.05);
       box-shadow: 0 0 60px rgba(255, 0, 50, 0.25);
